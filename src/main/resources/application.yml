@@ -11,7 +11,7 @@ spring:
       hibernate:
         # show_sql: true
         format_sql: true
-        default_batch_fetch_size: 1000 #1000개 이상x
+        default_batch_fetch_size: 1000 #1000개 이상x 데이터베이스 in절에서 1000개로 제한하기도함
 logging.level:
   org.hibernate.SQL: debug
   org.hibernate.type: trace #스프링 부트 2.x, hibernate5
