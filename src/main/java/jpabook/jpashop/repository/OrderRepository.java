@@ -6,6 +6,7 @@ import jpabook.jpashop.repository.order.simplequery.OrderSimpleQueryDto;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Repository;
 import org.springframework.util.StringUtils;
+import org.springframework.web.bind.annotation.RequestParam;
 
 import javax.persistence.EntityManager;
 import javax.persistence.TypedQuery;
@@ -88,21 +89,33 @@ public class OrderRepository {
     }
 
 
-    public List<Order> finAllWithMemberDelivery() {
+    public List<Order> findAllWithMemberDelivery() {
         return em.createQuery(
-                "select o from Order o" +
-                        " join fetch o.member m" +
-                        " join fetch o.delivery d", Order.class
-        ).getResultList();
+                        "select o from Order o" +
+                                " join fetch o.member m" +
+                                " join fetch o.delivery d", Order.class)
+                .getResultList();
     }
 
     public List<Order> findAllWithItem() {
         return em.createQuery(
-                        "select distinct o from Order o" +
+                        "select distinct o from Order o" + //jpa에서 자체적으로 중복제거
                                 " join fetch o.member m" +
                                 " join fetch o.delivery d" +
                                 " join fetch o.orderItems oi" +
                                 " join fetch oi.item i", Order.class)
+//                .setFirstResult(1)
+//                .setMaxResults(100)
+                .getResultList();
+    }
+
+    public List<Order> findAllWithMemberDelivery(int offset, int limit) {
+        return em.createQuery(
+                        "select o from Order o" +
+                                " join fetch o.member m" +
+                                " join fetch o.delivery d", Order.class)
+                .setFirstResult(offset)
+                .setMaxResults(limit)
                 .getResultList();
     }
 }
